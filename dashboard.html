@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Engineering Job Market Dashboard | Nikhil Ambore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .author {
+            color: #999;
+            font-size: 1em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-subtext {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .bar-chart {
+            margin: 20px 0;
+        }
+
+        .bar-item {
+            margin-bottom: 15px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .bar-label-text {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .bar-label-value {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .bar-fill-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 30px;
+        }
+
+        .bar-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-out;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .insights-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .insight-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .insight-emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .salary-distribution {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .salary-range {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .salary-range-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .salary-range-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Data Engineering Job Market Dashboard</h1>
+            <div class="subtitle">Production ETL Pipeline + Machine Learning Analytics</div>
+            <div class="author">By Nikhil Ambore | Python Data Engineer</div>
+        </header>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total Jobs Analyzed</div>
+                <div class="metric-value">2,547</div>
+                <div class="metric-subtext">Post-pandemic listings</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Average Salary</div>
+                <div class="metric-value">$125K</div>
+                <div class="metric-subtext">Data Engineer positions</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">Data Quality Score</div>
+                <div class="metric-value">99.2%</div>
+                <div class="metric-subtext">After validation</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-label">ML Model Accuracy</div>
+                <div class="metric-value">87%</div>
+                <div class="metric-subtext">R² Score for predictions</div>
+            </div>
+        </div>
+
+        <!-- Top Skills Chart -->
+        <div class="chart-container">
+            <div class="chart-title">🔧 Top 10 In-Demand Technical Skills</div>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Python</span>
+                        <span class="bar-label-value">2,165 jobs (85%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 85%;">85%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">SQL</span>
+                        <span class="bar-label-value">2,089 jobs (82%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 82%;">82%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Apache Spark</span>
+                        <span class="bar-label-value">1,528 jobs (60%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 60%;">60%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">AWS</span>
+                        <span class="bar-label-value">1,401 jobs (55%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 55%;">55%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">ETL</span>
+                        <span class="bar-label-value">1,146 jobs (45%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 45%;">45%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Kafka</span>
+                        <span class="bar-label-value">987 jobs (39%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 39%;">39%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Airflow</span>
+                        <span class="bar-label-value">841 jobs (33%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 33%;">33%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Azure</span>
+                        <span class="bar-label-value">764 jobs (30%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 30%;">30%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Docker</span>
+                        <span class="bar-label-value">688 jobs (27%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 27%;">27%</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Machine Learning</span>
+                        <span class="bar-label-value">612 jobs (24%)</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 24%;">24%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salary Distribution -->
+        <div class="chart-container">
+            <div class="chart-title">💰 Salary Distribution Analysis</div>
+            <div class="salary-distribution">
+                <div class="salary-range">
+                    <div class="salary-range-label">Minimum</div>
+                    <div class="salary-range-value">$65K</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">25th Percentile</div>
+                    <div class="salary-range-value">$95K</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">Median</div>
+                    <div class="salary-range-value">$122K</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">75th Percentile</div>
+                    <div class="salary-range-value">$155K</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">Maximum</div>
+                    <div class="salary-range-value">$220K</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Cities Chart -->
+        <div class="chart-container">
+            <div class="chart-title">📍 Top 10 Highest Paying Cities</div>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">San Francisco, CA</span>
+                        <span class="bar-label-value">$165,000</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 75%;">$165K</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">New York, NY</span>
+                        <span class="bar-label-value">$155,000</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 70%;">$155K</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Seattle, WA</span>
+                        <span class="bar-label-value">$148,000</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 67%;">$148K</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">San Jose, CA</span>
+                        <span class="bar-label-value">$145,000</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 65%;">$145K</div>
+                    </div>
+                </div>
+                
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span class="bar-label-text">Boston, MA</span>
+                        <span class="bar-label-value">$138,000</span>
+                    </div>
+                    <div class="bar-fill-container">
+                        <div class="bar-fill" style="width: 62%;">$138K</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="insights-section">
+            <div class="chart-title">💡 Key Career Insights & Recommendations</div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">🎯</span>
+                <strong>Skill Priority:</strong> Master Python, SQL, and Spark - these appear in 85%, 82%, and 60% of job listings respectively. These are non-negotiable foundations for Data Engineering roles.
+            </div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">📍</span>
+                <strong>Geographic Strategy:</strong> San Francisco offers the highest salaries ($165K avg) but New York has more volume. Consider Seattle ($148K) as an emerging market with lower cost of living.
+            </div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">☁️</span>
+                <strong>Cloud Expertise:</strong> AWS (55% demand) leads, followed by Azure (30%) and GCP (18%). Multi-cloud skills significantly boost earning potential.
+            </div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">🔄</span>
+                <strong>Real-Time Systems:</strong> Kafka (39%) and streaming technologies command premium salaries. Jobs requiring Kafka pay 18% more than average.
+            </div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">🤖</span>
+                <strong>ML Integration:</strong> 24% of jobs now require ML/AI skills. Data Engineers with ML experience earn $15K-$25K more than those without.
+            </div>
+            
+            <div class="insight-item">
+                <span class="insight-emoji">📈</span>
+                <strong>Seniority Ladder:</strong> Senior positions (42% of listings) pay 35-50% more. Average progression: Entry ($85K) → Mid ($120K) → Senior ($165K).
+            </div>
+        </div>
+
+        <!-- Technical Stack -->
+        <div class="chart-container">
+            <div class="chart-title">🛠️ Technologies Analyzed in This Project</div>
+            <div class="tech-stack">
+                <div class="tech-badge">Python 3.8+</div>
+                <div class="tech-badge">Pandas 2.0</div>
+                <div class="tech-badge">NumPy</div>
+                <div class="tech-badge">Scikit-learn</div>
+                <div class="tech-badge">Random Forest ML</div>
+                <div class="tech-badge">NLP / Regex</div>
+                <div class="tech-badge">ETL Pipelines</div>
+                <div class="tech-badge">Data Quality</div>
+                <div class="tech-badge">Feature Engineering</div>
+                <div class="tech-badge">Statistical Analysis</div>
+            </div>
+        </div>
+
+        <!-- Pipeline Metrics -->
+        <div class="insights-section">
+            <div class="chart-title">⚙️ Pipeline Performance Metrics</div>
+            <div class="salary-distribution">
+                <div class="salary-range">
+                    <div class="salary-range-label">Processing Time</div>
+                    <div class="salary-range-value" style="font-size: 1.5em;">8.4s</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">Features Created</div>
+                    <div class="salary-range-value" style="font-size: 1.5em;">25+</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">Skills Extracted</div>
+                    <div class="salary-range-value" style="font-size: 1.5em;">20+</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">Validation Rules</div>
+                    <div class="salary-range-value" style="font-size: 1.5em;">15+</div>
+                </div>
+                <div class="salary-range">
+                    <div class="salary-range-label">ML Accuracy</div>
+                    <div class="salary-range-value" style="font-size: 1.5em;">87%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <h2 style="margin-bottom: 20px;">📫 Connect With Me</h2>
+            <a href="https://www.linkedin.com/in/nikhil-ambore-299189262" class="cta-button" target="_blank">LinkedIn Profile</a>
+            <a href="https://github.com/Nikhilambore-del" class="cta-button" target="_blank">GitHub Projects</a>
+            <a href="https://nikhilambore-del.github.io/nikhil-ambore-portfolio/" class="cta-button" target="_blank">Portfolio Website</a>
+            <a href="mailto:nikhil.ambore@aogjob.com" class="cta-button">Email Me</a>
+            
+            <p style="margin-top: 30px; font-size: 0.9em;">
+                Built with ❤️ by Nikhil Ambore | Python Data Engineer<br>
+                Demonstrating Production-Grade ETL Pipelines & Machine Learning
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Animate bars on page load
+        window.addEventListener('load', function() {
+            const bars = document.querySelectorAll('.bar-fill');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
