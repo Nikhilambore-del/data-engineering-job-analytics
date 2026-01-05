@@ -1,3 +1,11 @@
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![Status](https://img.shields.io/badge/Status-Complete-success)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+[View Live Demo](https://nikhilambore-del.github.io/data-engineering-job-analytics/dashboard.html) | 
+[Download Dataset](https://github.com/Nikhilambore-del/data-engineering-job-analytics/blob/main/DataEngineer.csv)
+
+
 \# 🚀 Data Engineering Job Market Analytics Platform
 
 
@@ -183,6 +191,7 @@ MIT License - Feel free to use this project as reference!
 
 
 \*\*Built with ❤️ by Nikhil Ambore | Python Data Engineer\*\*
+
 
 
 
