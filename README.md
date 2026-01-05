@@ -16,7 +16,18 @@
 
 \*\*Portfolio:\*\* https://nikhilambore-del.github.io/nikhil-ambore-portfolio/
 
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
+![GitHub stars](https://img.shields.io/github/stars/Nikhilambore-del/data-engineering-job-analytics?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Nikhilambore-del/data-engineering-job-analytics?style=social)
+
+---
+
+**[📊 Live Demo](https://nikhilambore-del.github.io/data-engineering-job-analytics/) | [📧 Contact](mailto:nikhil.ambore@aogjob.com) | [💼 Portfolio](https://nikhilambore-del.github.io/nikhil-ambore-portfolio/)**
+```
 
 \## 📊 Project Overview
 
@@ -191,6 +202,7 @@ MIT License - Feel free to use this project as reference!
 
 
 \*\*Built with ❤️ by Nikhil Ambore | Python Data Engineer\*\*
+
 
 
 
